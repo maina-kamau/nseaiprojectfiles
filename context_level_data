@@ -1,0 +1,14 @@
+flowchart LR
+    INV([Retail Investor])
+    SRC([Public Data Sources])
+    LLM([Language Model API])
+    OPR([Operator])
+
+    P0["0<br/>NSE AI Analyst"]
+
+    SRC -->|price files, news items, macro releases| P0
+    P0 -->|prompts, claims| LLM
+    LLM -->|drafts, verdicts| P0
+    P0 -->|recommendations, evidence, portfolio state| INV
+    INV -->|credentials, queries| P0
+    P0 -->|alerts, cost ledger| OPR
