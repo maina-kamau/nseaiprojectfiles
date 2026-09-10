@@ -1,0 +1,40 @@
+flowchart LR
+    INV(["Retail Investor"])
+    OPR(["Operator"])
+    SCH(["Scheduler<br/>(time-triggered)"])
+    LLM(["Language Model API<br/>(external)"])
+    SRC(["Public Data Sources<br/>(external)"])
+
+    subgraph SYS["NSE AI Analyst"]
+        U1(["UC1 Authenticate"])
+        U2(["UC2 Browse market"])
+        U3(["UC3 View security detail"])
+        U4(["UC4 View recommendation"])
+        U5(["UC5 Inspect claim-level evidence"])
+        U6(["UC6 View simulated portfolio"])
+        U7(["UC7 Ingest market and content data"])
+        U8(["UC8 Generate draft recommendation"])
+        U9(["UC9 Verify claims by swarm voting"])
+        U10(["UC10 Apply consensus gate"])
+        U11(["UC11 Execute simulated trades"])
+        U12(["UC12 Monitor alerts and cost"])
+        U13(["UC13 Run seeded-error benchmark"])
+    end
+
+    INV --- U1
+    INV --- U2
+    INV --- U3
+    INV --- U4
+    INV --- U5
+    INV --- U6
+    OPR --- U12
+    OPR --- U13
+    SCH --- U7
+    SCH --- U8
+    U7 --- SRC
+    U8 -.->|includes| U9
+    U9 -.->|includes| U10
+    U10 -.->|includes| U11
+    U8 --- LLM
+    U9 --- LLM
+    U4 -.->|extends| U5
