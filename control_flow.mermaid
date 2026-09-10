@@ -1,0 +1,36 @@
+sequenceDiagram
+    participant SCH as Scheduler
+    participant ADV as Advisory orchestrator
+    participant RAG as Retrieval and wiki
+    participant IND as Indicator library
+    participant STR as Strategist (capable model)
+    participant VO as Voting orchestrator
+    participant TOOL as Verification tool
+    participant MV as Micro-validator (small model)
+    participant POL as Consensus policy
+    participant DB as Database
+
+    SCH->>ADV: advise(ticker)
+    ADV->>RAG: retrieve context and wiki page
+    RAG-->>ADV: cited chunks, curated page
+    ADV->>IND: quantitative summary
+    IND-->>ADV: indicators
+    ADV->>STR: context bundle
+    STR-->>ADV: draft: stance, thesis, typed claims
+    ADV->>DB: persist draft and claims
+    loop for each checkable claim
+        ADV->>VO: verify(claim)
+        VO->>TOOL: run(payload)
+        TOOL-->>VO: ToolResult (cached for all samples)
+        loop until margin k reached or cap N_max
+            VO->>MV: claim + ToolResult only
+            MV-->>VO: verdict + rationale
+            VO->>VO: red-flag screen (RF1, RF2)
+            VO->>DB: persist ValidatorVote
+        end
+        VO-->>ADV: verdict + vote trail
+    end
+    ADV->>POL: decide(claims)
+    POL-->>ADV: disposition, confidence
+    ADV->>DB: persist final recommendation and costs
+    ADV-->>SCH: gated recommendation
