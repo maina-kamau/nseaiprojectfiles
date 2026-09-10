@@ -1,0 +1,44 @@
+flowchart TB
+    SRC([Public Data Sources])
+    LLM([Language Model API])
+    INV([Retail Investor])
+
+    P1["1.0<br/>Ingest and normalise"]
+    P2["2.0<br/>Index and curate"]
+    P3["3.0<br/>Compute indicators"]
+    P4["4.0<br/>Draft recommendation"]
+    P5["5.0<br/>Verify claims"]
+    P6["6.0<br/>Apply consensus gate"]
+    P7["7.0<br/>Simulate portfolio"]
+    P8["8.0<br/>Serve API"]
+
+    D1[("D1 Market data<br/>Security, MarketSnapshot, DailyBar")]
+    D2[("D2 Content<br/>Article, Document, MacroIndicator")]
+    D3[("D3 Vector store<br/>Chunk, WikiPage")]
+    D4[("D4 Advisory<br/>AdvisoryRun, Recommendation, Claim, ValidatorVote, CostEntry")]
+    D5[("D5 Simulation<br/>Portfolio, Position, Trade, DailyValuation")]
+
+    SRC --> P1
+    P1 --> D1
+    P1 --> D2
+    D2 --> P2
+    P2 --> D3
+    D1 --> P3
+    D3 --> P4
+    P3 --> P4
+    P4 <--> LLM
+    P4 --> D4
+    D4 --> P5
+    D1 --> P5
+    D2 --> P5
+    P5 <--> LLM
+    P5 --> D4
+    D4 --> P6
+    P6 --> D4
+    D4 --> P7
+    D1 --> P7
+    P7 --> D5
+    D4 --> P8
+    D5 --> P8
+    D1 --> P8
+    P8 --> INV
