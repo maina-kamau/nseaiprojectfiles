@@ -1,0 +1,74 @@
+classDiagram
+    class Security {
+        +code
+        +name
+        +segment
+        +status
+    }
+    class DailyBar {
+        +date
+        +open
+        +high
+        +low
+        +close
+        +volume
+    }
+    class Document {
+        +kind
+        +title
+        +text
+        +published_at
+    }
+    class Chunk {
+        +ordinal
+        +text
+        +embedding
+    }
+    class AdvisoryRun {
+        +trading_date
+        +attempt
+        +status
+        +k
+    }
+    class Recommendation {
+        +stance
+        +thesis
+        +confidence
+        +is_final
+    }
+    class Claim {
+        +claim_id
+        +text
+        +claim_type
+        +checkable
+        +verdict
+        +disposition
+    }
+    class ValidatorVote {
+        +sample_ordinal
+        +verdict
+        +red_flagged
+        +flag_reason
+    }
+    class CostEntry {
+        +role
+        +model
+        +tokens_in
+        +tokens_out
+        +usd
+    }
+    class Trade {
+        +side
+        +status
+        +quantity
+        +price
+    }
+
+    Security "1" --> "*" DailyBar
+    Security "1" --> "*" AdvisoryRun
+    Document "1" --> "*" Chunk
+    AdvisoryRun "1" --> "*" Recommendation
+    AdvisoryRun "1" --> "*" CostEntry
+    Recommendation "1" --> "*" Claim
+    Claim "1" --> "*" ValidatorVote
+    Recommendation "1" --> "0..1" Trade
