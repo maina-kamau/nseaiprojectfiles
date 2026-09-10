@@ -1,0 +1,45 @@
+flowchart TB
+    subgraph PRES["Presentation layer"]
+        NEXT["Next.js single-page application<br/>typed client generated from OpenAPI"]
+    end
+    subgraph APIL["API layer"]
+        DRF["Django REST Framework<br/>/api/v1 · JWT authentication"]
+        ADMIN["Django admin<br/>operator console"]
+    end
+    subgraph DOM["Domain layer"]
+        ADV["advisory<br/>run orchestration, persistence"]
+        SIM["simulation<br/>paper-trading engine, metrics"]
+        AGT["agents<br/>Strategist, micro-validators,<br/>voting orchestrator, consensus policy"]
+    end
+    subgraph SUP["Supporting layer"]
+        RAG["rag<br/>chunking, embeddings, retrieval, curator"]
+        MD["market_data<br/>ingestion, bar derivation, indicators"]
+        CT["content<br/>feeds, full text, macro"]
+        CORE["core<br/>get_chat_model seam, cost metering"]
+    end
+    subgraph INFRA["Infrastructure"]
+        PG[("PostgreSQL 16 + pgvector")]
+        RD[("Redis")]
+        CEL["Celery workers + beat"]
+    end
+
+    NEXT -->|HTTPS/JSON| DRF
+    DRF --> ADV
+    DRF --> SIM
+    ADMIN --> ADV
+    ADV --> AGT
+    SIM --> ADV
+    AGT --> RAG
+    AGT --> MD
+    AGT --> CORE
+    RAG --> CT
+    RAG --> PG
+    MD --> PG
+    CT --> PG
+    ADV --> PG
+    SIM --> PG
+    CEL --> ADV
+    CEL --> MD
+    CEL --> CT
+    CEL --> RAG
+    CEL --- RD
