@@ -1,0 +1,13 @@
+flowchart TB
+    S([Start: all claims carry verdicts]) --> A{Any core claim<br/>refuted?}
+    A -->|Yes| B{Regeneration<br/>budget remaining?}
+    B -->|Yes| C[Regenerate draft<br/>attempt + 1] --> S
+    B -->|No| H[Emit fail-safe HOLD<br/>with failure report]
+    A -->|No| D{Any core claim<br/>unverifiable?}
+    D -->|Yes| B
+    D -->|No| E{More than 50% of claims<br/>stripped or flagged?}
+    E -->|Yes| H
+    E -->|No| F[Strip refuted peripheral claims<br/>flag unverifiable peripheral claims]
+    F --> G[Compute confidence<br/>and band]
+    G --> I([Release gated recommendation])
+    H --> I
